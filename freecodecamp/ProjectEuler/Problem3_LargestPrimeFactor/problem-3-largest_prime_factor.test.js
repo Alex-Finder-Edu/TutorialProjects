@@ -25,6 +25,10 @@ test('largestPrimeFactor(8) should return 2', () => {
     expect(largestPrimeFactor(8)).toBe(2);
 });
 
+test('largestPrimeFactor(26) should return 13', () => {
+    expect(largestPrimeFactor(26)).toBe(13);
+});
+
 test('largestPrimeFactor(13195) should return 29', () => {
     expect(largestPrimeFactor(13195)).toBe(29);
 });

@@ -17,13 +17,20 @@ from snippets.serializers import SnippetSerializer
 '''
 
 # ImplementationMethod_3: Import Header
+'''
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+'''
 
+# ImplementationMethod_4 - Mixins: Import Header
+from snippets.models import Snippet
+from snippets.serializers import SnippetSerializer
+from rest_framework import mixins
+from rest_framework import generics
 
 '''
 
@@ -139,6 +146,8 @@ def snippet_detail(request, pk, format=None):
     by using APIView and overwriting get and post methods
 '''
 
+
+'''
 class SnippetList(APIView):
 
     """
@@ -185,3 +194,39 @@ class SnippetDetail(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+'''
+
+'''
+    ImplementationMethod_4: Mixins
+    Alternative way of writing views 
+    by composing the views through using the mixin classes
+'''
+
+class SnippetList(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class SnippetDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

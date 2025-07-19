@@ -25,12 +25,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 '''
-
+'''
 # ImplementationMethod_4 - Mixins: Import Header
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from rest_framework import mixins
 from rest_framework import generics
+'''
+
+# ImplementationMethod_5 - Generic Class-Based Views: Import Header
+from snippets.models import Snippet
+from snippets.serializers import SnippetSerializer
+from rest_framework import generics
+
 
 '''
 
@@ -202,6 +209,7 @@ class SnippetDetail(APIView):
     by composing the views through using the mixin classes
 '''
 
+'''
 class SnippetList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
@@ -230,3 +238,19 @@ class SnippetDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+'''
+
+'''
+
+    ImplementationMethod_5: Generic Class-Based Views
+    Alternative way of writing views 
+    by inheriting from various API based views available in generics
+'''
+class SnippetList(generics.ListCreateAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+
+class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer

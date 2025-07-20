@@ -1,17 +1,50 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from snippets import views
+from snippets import views_function_csrf_exempt,\
+      views_function_api_view,\
+      views_class_api_view,\
+      views_class_mixins,\
+      views_class_generics
 
 '''
-urlpatterns = [
-    path('snippets/', views.snippet_list),
-    path('snippets/<int:pk>/', views.snippet_detail),
-]
+Possible Values for views_type:
+    views_function_csrf_exempt
+    views_function_api_view
+    views_class_api_view
+    views_class_mixins
+    views_class_generics
 '''
 
-urlpatterns = [
-    path('snippets/', views.SnippetList.as_view()),
-    path('snippets/<int:pk>', views.SnippetDetail.as_view()),
-]
+views_type = "views_class_generics"
+
+if views_type == "views_function_csrf_exempt":
+    urlpatterns = [
+        path('snippets/', views_function_csrf_exempt.snippet_list),
+        path('snippets/<int:pk>/', views_function_csrf_exempt.snippet_detail),
+    ]
+
+elif views_type == "views_function_api_view":
+    urlpatterns = [
+        path('snippets/', views_function_api_view.snippet_list),
+        path('snippets/<int:pk>/', views_function_api_view.snippet_detail),
+    ]
+
+elif views_type == "views_class_api_view":
+    urlpatterns = [
+        path('snippets/', views_class_api_view.SnippetList.as_view()),
+        path('snippets/<int:pk>/', views_class_api_view.SnippetDetail.as_view()),
+    ]
+
+elif views_type == "views_class_mixins":
+    urlpatterns = [
+        path('snippets/', views_class_mixins.SnippetList.as_view()),
+        path('snippets/<int:pk>/', views_class_mixins.SnippetDetail.as_view()),
+    ]
+
+elif views_type == "views_class_generics":
+    urlpatterns = [
+        path('snippets/', views_class_generics.SnippetList.as_view()),
+        path('snippets/<int:pk>/', views_class_generics.SnippetDetail.as_view()),
+    ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

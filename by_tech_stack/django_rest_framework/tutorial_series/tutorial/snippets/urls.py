@@ -48,6 +48,9 @@ elif views_type == "views_class_generics":
 
         path('users/', views_class_generics.UserList.as_view()),
         path('users/<int:pk>/', views_class_generics.UserDetail.as_view()),
+
+        path('', views_class_generics.api_root),
+        path('snippets/<int:pk>/highlight/', views_class_generics.SnippetHighlight.as_view()),
     ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

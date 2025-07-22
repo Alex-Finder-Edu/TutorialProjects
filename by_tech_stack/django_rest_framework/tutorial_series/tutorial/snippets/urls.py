@@ -71,5 +71,3 @@ elif views_type == "views_class_generics":
         views_class_generics.UserDetail.as_view(),
         name='user-detail')
 ])
-
-urlpatterns = format_suffix_patterns(urlpatterns)

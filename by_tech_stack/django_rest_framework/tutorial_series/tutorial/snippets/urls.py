@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework import renderers
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
 from snippets import views_function_csrf_exempt,\
       views_function_api_view,\
       views_class_api_view,\
@@ -16,6 +17,7 @@ Possible Values for views_type:
     views_class_mixins
     views_class_generics
     views_class_viewsets
+    views_class_viewsets_routers
 '''
 
 views_type = "views_class_viewsets"
@@ -75,8 +77,22 @@ elif views_type == "views_class_generics":
         name='user-detail')
 ])
 
+elif views_type == "views_class_viewsets_routers":
+    from snippets.views_class_viewsets import api_root, SnippetViewSet, UserViewSet
+
+    # Create a router and register our ViewSets with it.
+    router = DefaultRouter()
+    router.register(r'snippets', SnippetViewSet, basename='snippet')
+    router.register(r'users', UserViewSet, basename='user')
+
+    # The API URLs are now determined automatically by the router.
+    urlpatterns = [
+        path('', include(router.urls)),
+    ]
+
+
 elif views_type == "views_class_viewsets":
-    from views_class_viewsets import api_root, SnippetViewSet, UserViewSet
+    from snippets.views_class_viewsets import api_root, SnippetViewSet, UserViewSet
 
     snippet_list = SnippetViewSet.as_view({
         'get': 'list',
